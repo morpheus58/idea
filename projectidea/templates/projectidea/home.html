@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js">
+    <link rel="stylesheet" href="{% static "css/main.css" %}">
     <title>Idea Engine</title>
 </head>
 <body>
@@ -24,6 +25,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
+        {% if user.is_authenticated %}
         <li><a href="{% url "technology_list" %}">Tech</a></li>
         <li><a href="{% url "environment_list" %}">Environment</a></li>
         <li><a href="{% url "shopping_list" %}">Shopping</a></li>
@@ -31,12 +33,13 @@
         <li><a href="{% url "financial_list" %}">Financial</a></li>
         <li><a href="{% url "writing_list" %}">Writing</a></li>
         <li><a href="{% url "idea_new" %}">New</a></li>
-        {% if user.is_authenticated %}
-        <a href="{% url "url_new" %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
+
+        <li><a href="{% url "idea_new" %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a></li>
+        <li><p class="navbar-text"> Hello, {{ user.username }}<small>(<a href="{% url "django.contrib.auth.views.logout" %}">Log out</a>)</small></p></li>
         {% else %}
-        <a href="{% url "django.contrib.auth.views.login" %}" class="top-menu"><span class="glyphicon glyphicon-lock"></span></a>
+        <li><a href="{% url "django.contrib.auth.views.login" %}" class="top-menu"><span class="glyphicon glyphicon-lock"></span></a></li>
+
         {% endif %}
-        <h1><a href="{% url "blog.views.post_list" %}">Django Girls</a></h1>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

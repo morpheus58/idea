@@ -21,9 +21,9 @@ from django.shortcuts import redirect
 
 # Create your views here.
 @ratelimit(key='ip', rate='10/m', block=True)
-@login_required(login_url='/accounts/login')
+@login_required(login_url='/idea/accounts/login')
 def idea_list(request):
-    ideas=get_list_or_404(Idea)[:5]
+    ideas=Idea.objects.all()
     return render(request, 'projectidea/idea_list.html', {'ideas': ideas})
 @ratelimit(key='ip', rate='10/m', block=True)
 @login_required(login_url='/idea/accounts/login')
@@ -67,7 +67,6 @@ def idea_new(request):
             serializer = IdeaSerializer(data=form.data)
             if serializer.is_valid():
                 idea = IdeaSerializer.create(self=serializer, validated_data=serializer.data)
-                serializer.save()
                 idea.save()
             return redirect('projectidea.views.idea_detail', pk=idea.pk)
     else:
@@ -83,8 +82,9 @@ def idea_edit(request, pk):
         form=IdeaForm(request.POST, instance=idea)
         if form.is_valid():
             serializer = IdeaSerializer(data=form.data)
-            idea2 = IdeaSerializer.update(self=serializer, instance=idea)
-            idea2.save()
+            if serializer.is_valid():
+                idea2 = IdeaSerializer.update(self=idea, instance=idea, validated_data=form.data)
+                idea2.save()
             return redirect('projectidea.views.idea_detail', pk=idea.pk)
     else:
         form = IdeaForm(instance=idea)

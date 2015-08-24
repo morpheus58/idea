@@ -5,4 +5,4 @@ from .models import Idea
 class IdeaForm(forms.ModelForm):
     class Meta:
         model = Idea
-        fields = ('title', 'idea', 'category')
+        fields = ('title', 'idea', 'created_at', 'category')

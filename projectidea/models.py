@@ -13,7 +13,7 @@ class Idea(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     published_at = models.DateTimeField(blank=True, null=True)
     updated_last = models.DateTimeField(default=timezone.now)
-    category = models.CharField(max_length=20, choices=categories, default='Technology')
+    category = models.CharField(max_length=20, choices=categories)
     sentiment = models.CharField(max_length=100, default='')
 
     def publish(self):

@@ -27,10 +27,10 @@ class IdeaSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         client = textapi.Client(text_api_id_key, text_api_secret)
-        instance.sentiment = client.Sentiment({'text': instance.idea})
-        instance.user = validated_data.get('user', instance.user)
+        instance.sentiment = client.Sentiment({'text': instance.idea}).get('polarity')
         instance.title = validated_data.get('title', instance.title)
         instance.idea = validated_data.get('idea', instance.idea)
         instance.created_at = validated_data.get('created_at', instance.created_at)
         instance.updated_last = timezone.now()
         instance.save()
+        return  instance
