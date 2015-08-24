@@ -1,0 +1,15 @@
+{% extends "projectidea/home.html" %}
+
+{% block content %}
+<div class="card">
+    <a class="btn btn-default" href="{% url "idea_edit" pk=idea.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+    <a class="btn btn-default" href="{% url "idea_remove" pk=idea.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+    <h1>{{ idea.title }}</h1>
+    <h2>Created By: {{ user.username }}</h2>
+    <p>The Lovely Idea: {{ idea.idea }}</p>
+    <p>You made this on this date: {{ idea.created_by }}</p>
+    <p>This tells you whether this was similar to some tweets last time we checked: {{ idea.similar_to_tweet }}</p>
+    <p>This is when you last updated this: {{ idea.updated_last }}</p>
+    <p>This is the sentiment of your idea: {{ idea.sentiment }}</p>
+</div>
+{% endblock %}</html>

@@ -1,0 +1,21 @@
+{% extends "projectidea/home.html" %}
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{{ user.username }} idea space</title>
+</head>
+<body>
+    {% block content %}
+    <h1>Love It</h1>
+    {% for idea in ideas %}
+    <div class="card">
+        <h1>{{ idea.title }}</a></h1>
+        <p>idea: {{ idea.idea }}</p>
+        <p>created at: {{ idea.updated_last }}</p>
+        <p>Made By: {{ idea.user }}</p>
+        <p>Category: {{ idea.category.name }}</p>
+    </div>
+    {% endfor %}
+    {% endblock content %}
+</body>
+</html>

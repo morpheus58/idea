@@ -1,0 +1,9 @@
+{% extends "projectidea/home.html" %}
+
+{% block content %}
+<h1>New Expanded Url</h1>
+<form method="POST" class="post-form">{% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="save btn btn-default">Give Sentiment</button>
+</form>
+{% endblock %}
