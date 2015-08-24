@@ -18,18 +18,25 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">Brand</a>
+      <a class="navbar-brand" href="{% url "idea_list" %}">ProjectIdea</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a href="#">Tech</a></li>
-        <li><a href="#">Environment</a></li>
-        <li><a href="#">Shopping</a></li>
-        <li><a href="#">People</a></li>
-        <li><a href="#">Financial</a></li>
-        <li><a href="#">Writing</a></li>
+        <li><a href="{% url "technology_list" %}">Tech</a></li>
+        <li><a href="{% url "environment_list" %}">Environment</a></li>
+        <li><a href="{% url "shopping_list" %}">Shopping</a></li>
+        <li><a href="{% url "people_list" %}">People</a></li>
+        <li><a href="{% url "financial_list" %}">Financial</a></li>
+        <li><a href="{% url "writing_list" %}">Writing</a></li>
+        <li><a href="{% url "idea_new" %}">New</a></li>
+        {% if user.is_authenticated %}
+        <a href="{% url "url_new" %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
+        {% else %}
+        <a href="{% url "django.contrib.auth.views.login" %}" class="top-menu"><span class="glyphicon glyphicon-lock"></span></a>
+        {% endif %}
+        <h1><a href="{% url "blog.views.post_list" %}">Django Girls</a></h1>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

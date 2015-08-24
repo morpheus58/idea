@@ -1,7 +1,7 @@
 {% extends "projectidea/home.html" %}
 
 {% block content %}
-<div class="card">
+<div>
     <a class="btn btn-default" href="{% url "idea_edit" pk=idea.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
     <a class="btn btn-default" href="{% url "idea_remove" pk=idea.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
     <h1>{{ idea.title }}</h1>

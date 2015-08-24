@@ -1,8 +1,8 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.http import Http404
 from .models import Idea
 #from .forms import IdeaForm
-from .serializers import CategorySerializer, IdeaSerializer
+from .serializers import IdeaSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
@@ -18,48 +18,49 @@ from .forms import IdeaForm
 from ratelimit.decorators import ratelimit
 from .serializers import IdeaSerializer
 from django.shortcuts import redirect
+
 # Create your views here.
 @ratelimit(key='ip', rate='10/m', block=True)
-@login_required(login_url='/idea/accounts/login')
+@login_required(login_url='/accounts/login')
 def idea_list(request):
-    ideas=Idea.objects.all().order_by('-created_at')[:5]
+    ideas=get_list_or_404(Idea)[:5]
     return render(request, 'projectidea/idea_list.html', {'ideas': ideas})
 @ratelimit(key='ip', rate='10/m', block=True)
 @login_required(login_url='/idea/accounts/login')
 def technology_list(request):
-    tech_ideas=Idea.objects.filter(category='Technology')
+    tech_ideas=get_list_or_404(Idea, category='Technology')
     return render(request, 'projectidea/idea_list.html', {'ideas': tech_ideas})
 @ratelimit(key='ip', rate='10/m', block=True)
 @login_required(login_url='/idea/accounts/login')
 def environment_list(request):
-    tech_ideas=Idea.objects.filter(category='Environment')
+    tech_ideas=get_list_or_404(Idea, category='Environment')
     return render(request, 'projectidea/idea_list.html', {'ideas': tech_ideas})
 @ratelimit(key='ip', rate='10/m', block=True)
 @login_required(login_url='/idea/accounts/login')
 def shopping_list(request):
-    tech_ideas=Idea.objects.get(category='Shopping')
+    tech_ideas=get_list_or_404(Idea, category='Shopping')
     return render(request, 'projectidea/idea_list.html', {'ideas': tech_ideas})
 @ratelimit(key='ip', rate='10/m', block=True)
 @login_required(login_url='/idea/accounts/login')
 def people_list(request):
-    tech_ideas=Idea.objects.get(category='People')
+    tech_ideas=get_list_or_404(Idea, category='People')
     return render(request, 'projectidea/idea_list.html', {'ideas': tech_ideas})
 @ratelimit(key='ip', rate='10/m', block=True)
 @login_required(login_url='/idea/accounts/login')
 def financial_list(request):
-    tech_ideas=Idea.objects.get(category='Financial')
+    tech_ideas=get_list_or_404(Idea, category='Financial')
     return render(request, 'projectidea/idea_list.html', {'ideas': tech_ideas})
 @ratelimit(key='ip', rate='10/m', block=True)
 @login_required(login_url='/idea/accounts/login')
 def writing_list(request):
-    tech_ideas=Idea.objects.get(category='Writing')
+    tech_ideas=get_list_or_404(Idea, category='Writing')
     return render(request, 'projectidea/idea_list.html', {'ideas': tech_ideas})
 @ratelimit(key='ip', rate='10/m', block=True)
 @login_required(login_url='/idea/accounts/login')
 def idea_detail(request, pk):
     idea = get_object_or_404(Idea, pk=pk)
     return render(request, 'projectidea/idea_detail.html', {'idea': idea})
-def url_new(request):
+def idea_new(request):
     if request.method == "POST":
         form=IdeaForm(request.POST)
         if form.is_valid():
@@ -68,10 +69,10 @@ def url_new(request):
                 idea = IdeaSerializer.create(self=serializer, validated_data=serializer.data)
                 serializer.save()
                 idea.save()
-            return redirect('urlexpander.views.urls_detail', pk=idea.id)
+            return redirect('projectidea.views.idea_detail', pk=idea.pk)
     else:
         form = IdeaForm()
-        return render(request, 'urlexpander/urls_edit.html', {'form': form})
+        return render(request, 'projectidea/idea_edit.html', {'form': form})
 
 
 @ratelimit(key='ip', rate='10/m', block=True)
@@ -81,7 +82,7 @@ def idea_edit(request, pk):
     if request.method == "POST":
         form=IdeaForm(request.POST, instance=idea)
         if form.is_valid():
-            serializer = IdeaSerializer()
+            serializer = IdeaSerializer(data=form.data)
             idea2 = IdeaSerializer.update(self=serializer, instance=idea)
             idea2.save()
             return redirect('projectidea.views.idea_detail', pk=idea.pk)
@@ -132,7 +133,7 @@ class IdeasList(RatelimitMixin, generics.ListCreateAPIView):
     #             return Response(serializer.data, status=status.HTTP_201_CREATED)
     #         return Response(serializer.errors,  status=status.HTTP_400_BAD_REQUEST)
 
-class IdeaDetail(RatelimitMixin, APIView):
+class IdeaDetail(RatelimitMixin, generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     ratelimit_key = 'ip'
     ratelimit_rate = '25/m'

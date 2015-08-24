@@ -9,11 +9,14 @@
     <h1>Love It</h1>
     {% for idea in ideas %}
     <div class="card">
-        <h1>{{ idea.title }}</a></h1>
+        <a class="btn btn-default" href="{% url "idea_edit" pk=idea.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+        <a class="btn btn-default" href="{% url "idea_remove" pk=idea.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+        <a href="{% url "idea_detail" pk=idea.pk %}><h1>{{ idea.title }}</h1></a>
         <p>idea: {{ idea.idea }}</p>
         <p>created at: {{ idea.updated_last }}</p>
         <p>Made By: {{ idea.user }}</p>
         <p>Category: {{ idea.category.name }}</p>
+        <p>Sentiment: {{ idea.sentiment }}</p>
     </div>
     {% endfor %}
     {% endblock content %}
